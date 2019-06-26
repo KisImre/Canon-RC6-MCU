@@ -6,7 +6,6 @@
 void init_gpio(void) {
     LPC_SWM->PINASSIGN6 &= 0x00ffffff;
     LPC_IOCON->PIO0_0 = 0x00000080;
-    LPC_IOCON->PIO0_1 = 0x00000090;
 }
 
 void init_timer(unsigned int counter) {
@@ -58,7 +57,7 @@ void init_interrupt(void) {
 }
 
 unsigned int is_instant_mode(void) {
-    return 0; /* TODO: implement lpc8xx is_instant_mode: LPC_GPIO_PORT->B0[1]; */
+    return LPC_GPIO_PORT->B0[4];
 }
 
 void set_active_count(unsigned int counter) {

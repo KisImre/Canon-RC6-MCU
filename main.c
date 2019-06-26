@@ -38,6 +38,8 @@ int main() {
 }
 
 void Timer_IRQHandler(void) {
+    clear_timer_interrupt();
+
     if (repeat_count == 0) {
         if (*pattern == 0) {
             set_active_count(0);
@@ -53,5 +55,4 @@ void Timer_IRQHandler(void) {
         --repeat_count;
     }
 
-    clear_timer_interrupt();
 }

@@ -15,7 +15,7 @@ struct Pattern {
 };
 
 static const struct Pattern pulses = {.active_count = NANOSEC_TO_COUNTER(9300), .repeat_count = 18};
-static const struct Pattern startup_pause = {.active_count = 0, .repeat_count = NS_TO_IR_PERIOD(INSTANT_SHUTTER_NS)};
+static const struct Pattern startup_pause = {.active_count = 0, .repeat_count = NS_TO_IR_PERIOD(STARTUP_NS)};
 static const struct Pattern instant_pause = {.active_count = 0, .repeat_count = NS_TO_IR_PERIOD(INSTANT_SHUTTER_NS)};
 static const struct Pattern delayed_pause = {.active_count = 0, .repeat_count = NS_TO_IR_PERIOD(DELAYED_SHUTTER_NS)};
 

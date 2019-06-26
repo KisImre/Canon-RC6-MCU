@@ -49,7 +49,7 @@ Vectors:
     .word 0
     .word 0
     .word 0
-    .word 0xeffefced
+    .word vector_checksum /* Defined in linker script */
     .word 0
     .word 0
     .word 0

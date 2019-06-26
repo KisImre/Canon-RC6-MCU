@@ -7,6 +7,8 @@ ENTRY(Reset_Handler)
 /* Always use static/global variables with peripherals/DMA. */
 _estack = 0x10000200;
 
+vector_checksum = 0 - _estack - (Reset_Handler + 1) - (NMI_Handler + 1) - (HardFault_Handler + 1);
+
 MEMORY
 {
 	FLASH (rx)      : ORIGIN = 0x00000000, LENGTH = 4K

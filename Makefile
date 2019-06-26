@@ -50,16 +50,6 @@ else ifeq ($(PLATFORM),lpc8xx)
 	LDFLAGS += -specs=/usr/arm-none-eabi/lib/thumb/nofp/nosys.specs
 
 	INCLUDE_DIRS += CMSIS/Device/NXP/LPC8xx/Include
-	
-	DEPLOY_DEPS += lpc8xx_insert_checksum
-
-lpc8xx_insert_checksum: $(BUILDDIR)/lpc-insert-checksum
-	@echo "Inserting LPC checksum"
-	@$(BUILDDIR)/lpc-insert-checksum $(BINARY).bin
-
-$(BUILDDIR)/lpc-insert-checksum: platform/lpc8xx/lpc-insert-checksum/lpc-insert-checksum.c
-	@echo "Compiling $(<) for host"
-	@$(HOSTCC) $(<) -o $(@)
 else
 	$(error Invalid platform)
 endif
@@ -67,23 +57,23 @@ endif
 # Targets
 .PHONY: all clean distclean deploy debug gdb
 
-all: $(BINARY).bin $(BUILDDIR)/$(BINARY).dump
+all: $(BUILDDIR)/$(BINARY).elf $(BUILDDIR)/$(BINARY).dump
 	@echo "Building finished"
 
 clean:
 	@echo "Cleaning build"
-	@rm -rf $(OBJS) $(DEPS) $(BINARY).bin
+	@rm -rf $(OBJS) $(DEPS)
 
 distclean: clean
 	@rm -rf $(BUILDDIR)
 
-deploy: all $(DEPLOY_DEPS)
-	@echo "Flashing   $(BINARY).bin"
-	openocd -f platform/$(PLATFORM)/openocd.cfg -c "program $(BINARY).bin reset exit"
+deploy: all
+	@echo "Flashing   $(BINARY).elf"
+	openocd -f platform/$(PLATFORM)/openocd.cfg -c "program $(BUILDDIR)/$(BINARY).elf reset exit"
 
-debug: all $(DEPLOY_DEPS)
-	@echo "Debuging   $(BINARY).bin"
-	openocd -f platform/$(PLATFORM)/openocd.cfg -c "program $(BINARY).bin"
+debug: all
+	@echo "Debuging   $(BINARY).elf"
+	openocd -f platform/$(PLATFORM)/openocd.cfg -c "program $(BUILDDIR)/$(BINARY).elf"
 
 gdb: $(BUILDDIR)/$(BINARY).elf
 	@echo "Starting gdb"
@@ -115,10 +105,6 @@ LDFLAGS += $(addprefix -L,$(LIB_DIRS))
 LDFLAGS += $(addprefix -l,$(LIBS))
 
 # Common rules
-%.bin: $(BUILDDIR)/%.elf
-	@echo "Exporting  $(@)"
-	@$(OBJCOPY) -O binary $(<) $(@)
-	
 %.dump: %.elf
 	@echo "Exporting  $(@)"
 	@$(OBJDUMP) -d $(<) > $(@)

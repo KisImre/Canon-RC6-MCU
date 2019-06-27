@@ -24,11 +24,10 @@ CC := $(PREFIX)gcc
 CXX := $(PREFIX)g++
 AS := $(PREFIX)g++
 LD := $(PREFIX)g++
-OBJCOPY := $(PREFIX)objcopy
 OBJDUMP := $(PREFIX)objdump
 GDB := $(PREFIX)gdb
 MKDIR := mkdir -p
-
+ifneq ($(MAKECMDGOALS),clean)
 ifeq ($(PLATFORM),stm32f4xx)
 	# STM32F407IG
 	TARGET += -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16
@@ -53,6 +52,7 @@ else ifeq ($(PLATFORM),lpc8xx)
 else
 	$(error Invalid platform)
 endif
+endif
 
 # Targets
 .PHONY: all clean distclean deploy debug gdb
@@ -62,9 +62,6 @@ all: $(BUILDDIR)/$(BINARY).elf $(BUILDDIR)/$(BINARY).dump
 
 clean:
 	@echo "Cleaning build"
-	@rm -rf $(OBJS) $(DEPS)
-
-distclean: clean
 	@rm -rf $(BUILDDIR)
 
 deploy: all

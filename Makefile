@@ -50,7 +50,7 @@ else ifeq ($(PLATFORM),lpc8xx)
 
 	INCLUDE_DIRS += CMSIS/Device/NXP/LPC8xx/Include
 else
-	$(error Invalid platform)
+  $(error "Platform not exists. Valid platforms: stm32f4xx,lpc8xx")
 endif
 endif
 
